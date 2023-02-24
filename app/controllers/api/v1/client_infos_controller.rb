@@ -2,7 +2,6 @@ class Api::V1::ClientInfosController < ApplicationController
   before_action :authenticate_user!
   before_action :set_client_info, only: %i[ show update destroy ]
 
-
   # GET /client_infos
   def index
     @client_infos = ClientInfo.all
@@ -51,6 +50,6 @@ class Api::V1::ClientInfosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def client_info_params
-      params.require(:client_info).permit(:subject, :description, :body, :user_id, :status)
+      params.permit(:subject, :description, :file, :user_id, :status)
     end
 end

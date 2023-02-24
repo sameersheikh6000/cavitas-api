@@ -3,7 +3,7 @@ class CreateClientInfos < ActiveRecord::Migration[7.0]
     create_table :client_infos do |t|
       t.string :subject
       t.string :description
-      t.string :body
+      t.string :file
       t.integer :status
       t.references :user, null: false, foreign_key: true
 

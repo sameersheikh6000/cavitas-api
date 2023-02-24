@@ -10,19 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_24_122943) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_24_193523) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "client_infos", force: :cascade do |t|
     t.string "subject"
     t.string "description"
-    t.string "body"
+    t.string "file"
     t.integer "status"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_client_infos_on_user_id"
+  end
+
+  create_table "insured_clients", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "phone"
+    t.bigint "client_info_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_info_id"], name: "index_insured_clients_on_client_info_id"
   end
 
   create_table "rejected_files", force: :cascade do |t|
