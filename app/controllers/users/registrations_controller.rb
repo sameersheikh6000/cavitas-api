@@ -13,7 +13,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if resource.persisted?
       render json: {
         status: {code: 200, message: 'Signed up successfully.'},
-        data: resource
+        data: UserSerializer.new(resource).serializable_hash[:data][:attributes]
       }
     else
       render json: {
@@ -23,7 +23,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def sign_up_params
-    params.require(:user).permit(:email, :password, :password_confirmation)
+    params.require(:user).permit(:email, :password, :password_confirmation, :role)
   end 
   
   def update_user_params

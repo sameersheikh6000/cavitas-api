@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :rejected_files
       resources :client_infos
+      resources :insured_clients, only: %i[index]
     end
   end
 end

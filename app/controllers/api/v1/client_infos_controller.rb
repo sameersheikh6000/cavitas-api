@@ -4,14 +4,21 @@ class Api::V1::ClientInfosController < ApplicationController
 
   # GET /client_infos
   def index
-    @client_infos = ClientInfo.all
+    if current_user.role ==  'admin'
+      @client_infos = ClientInfo.all
+    else
+      @client_info = ClientInfo.where(user_id: current_user.id)
+    end
 
-    render json: @client_infos
+    render json: {
+      status: 200,
+      client_infos: @client_infos
+    }
   end
 
   # GET /client_infos/1
   def show
-    render json: @client_info
+    render json: {status: 200, client_info: @client_info}
   end
 
   # POST /client_infos
@@ -31,7 +38,7 @@ class Api::V1::ClientInfosController < ApplicationController
   # PATCH/PUT /client_infos/1
   def update
     if @client_info.update(client_info_params)
-      render json: @client_info
+      render json: {status: 200, client_info: @client_info}
     else
       render json: @client_info.errors, status: :unprocessable_entity
     end
@@ -40,6 +47,10 @@ class Api::V1::ClientInfosController < ApplicationController
   # DELETE /client_infos/1
   def destroy
     @client_info.destroy
+    render json: {
+      status: 200,
+      message: "Destroyed"
+    }
   end
 
   private
@@ -50,6 +61,6 @@ class Api::V1::ClientInfosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def client_info_params
-      params.permit(:subject, :description, :file, :user_id, :status)
+      params.permit(:subject, :description, :file, :status)
     end
 end
