@@ -16,12 +16,17 @@ class Api::V1::RejectedFilesController < ApplicationController
 
   # POST /rejected_files
   def create
-    @rejected_file = RejectedFile.new(rejected_file_params)
-
-    if @rejected_file.save
-      render json: @rejected_file, status: :created, location: @rejected_file
+    client_info = ClientInfo.find_by(id: params[:client_info][:id])
+    if !(client_info.rejected_file.present?)
+      @rejected_file = RejectedFile.new(rejected_file_params)
+      @rejected_file.client_info_id = client_info.id; @rejected_file.user_id = client_info.user.id
+      if @rejected_file.save
+        render json: @rejected_file, status: :created, location: @rejected_file
+      else
+        render json: @rejected_file.errors, status: :unprocessable_entity
+      end
     else
-      render json: @rejected_file.errors, status: :unprocessable_entity
+      client_info.rejected_file.update!(reason_of_rejection: params[:reason_of_rejection])
     end
   end
 
