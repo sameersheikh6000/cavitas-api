@@ -6,6 +6,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
    super
   end
 
+  def update
+    begin
+      user = current_user
+      user.update!(update_user_params)
+      render json: {status: 200, message: "Profile Upated Successfully!", user: user}
+    rescue => e
+      render json: {status: 500, message: e.message}
+    end
+  end
+
   
   private
 
